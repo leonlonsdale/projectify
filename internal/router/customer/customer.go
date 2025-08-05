@@ -22,9 +22,13 @@ func NewCustomerHandler(store *storage.Storage, auth *auth.Auth) *CustomerHandle
 }
 
 func (h *CustomerHandler) Register(m *http.ServeMux) {
+
+	protectedUpdateCustomer := h.auth.Protect(h.HandleUpdateCustomer)
+	protectedDeleteCustomer := h.auth.Protect(h.HandleDeleteCustomer)
+
 	m.Handle("POST /customer", httputils.Make(h.HandleCreateCustomer))
 	m.Handle("GET /customer/{id}", httputils.Make(h.HandleGetCustomerByID))
 	m.Handle("GET /customer", httputils.Make(h.HandleGetCustomerByEmail))
-	m.Handle("PUT /customer/{id}", httputils.Make(h.HandleUpdateCustomer))
-	m.Handle("DELETE /customer/{id}", httputils.Make(h.HandleDeleteCustomer))
+	m.Handle("PUT /customer/{id}", httputils.Make(protectedUpdateCustomer))
+	m.Handle("DELETE /customer/{id}", httputils.Make(protectedDeleteCustomer))
 }
