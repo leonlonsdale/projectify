@@ -1,9 +1,8 @@
+// Package errs provides a structured approach to error handling within the application.
 package errs
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
 )
 
 type Kind string
@@ -59,82 +58,5 @@ func Wrap(err error, kind Kind, statusCode int, message string) error {
 		Kind:       kind,
 		StatusCode: statusCode,
 		Message:    message,
-	}
-}
-
-func GetStatusCode(err error) int {
-	if err == nil {
-		return http.StatusOK
-	}
-
-	if appErr, ok := err.(*Error); ok {
-		return appErr.StatusCode
-	}
-
-	return http.StatusInternalServerError
-}
-
-func NewBadRequest(message string, err error) error {
-	return Wrap(err, KindBadRequest, http.StatusBadRequest, message)
-}
-
-func NewInternalServerError(message string, err error) error {
-	return Wrap(err, KindInternal, http.StatusInternalServerError, message)
-}
-
-func NewNotFound(message string, err error) error {
-	return Wrap(err, KindNotFound, http.StatusNotFound, message)
-}
-
-func NewUnauthorized(message string, err error) error {
-	return Wrap(err, KindUnauthorized, http.StatusUnauthorized, message)
-}
-
-func NewForbidden(message string, err error) error {
-	return Wrap(err, KindForbidden, http.StatusForbidden, message)
-}
-
-func NewValidationErrors(validationErrs map[string]string) error {
-	if len(validationErrs) == 0 {
-		return nil
-	}
-	return &Error{
-		Err:        nil,
-		Kind:       KindBadRequest,
-		StatusCode: http.StatusBadRequest,
-		Message:    validationErrs,
-	}
-}
-
-type Response struct {
-	Status int      `json:"status"`
-	Error  *Details `json:"error,omitempty"`
-}
-
-type Details struct {
-	Kind    Kind `json:"kind"`
-	Message any  `json:"message"`
-}
-
-func ToJSON(err error) Response {
-	var appErr *Error
-	if !errors.As(err, &appErr) {
-		return Response{
-			Status: http.StatusInternalServerError,
-			Error: &Details{
-				Kind: KindInternal,
-				Message: map[string]string{
-					"error": "An unexpected internal error occurred",
-				},
-			},
-		}
-	}
-
-	return Response{
-		Status: appErr.StatusCode,
-		Error: &Details{
-			Kind:    appErr.Kind,
-			Message: appErr.Message,
-		},
 	}
 }
