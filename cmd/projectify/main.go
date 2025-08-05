@@ -25,7 +25,6 @@ type Application struct {
 }
 
 func (a *Application) setup() error {
-	a.auth = auth.NewAuth()
 
 	cfg, err := config.NewConfig()
 	if err != nil {
@@ -33,6 +32,7 @@ func (a *Application) setup() error {
 	}
 	a.cfg = cfg
 
+	a.auth = auth.NewAuth(a.cfg)
 	db, err := database.NewDB(a.cfg)
 	if err != nil {
 		return fmt.Errorf("init db: %w", err)
