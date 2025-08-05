@@ -1,9 +1,14 @@
-// Package auth exposes an Auth struct and utility functions for Argon2id
-// password encryption and JWT methods.
+// Package auth exposes an Auth layer which exposes password and jwt functionality
 package auth
 
-type Auth struct{}
+import "github.com/leonlonsdale/projectify/internal/auth/password"
+
+type Auth struct {
+	Password *password.A2idpassword
+}
 
 func NewAuth() *Auth {
-	return &Auth{}
+	return &Auth{
+		Password: password.NewA2idpassword(),
+	}
 }
