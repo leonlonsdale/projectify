@@ -4,7 +4,7 @@ package storage
 import (
 	"database/sql"
 
-	"github.com/leonlonsdale/projectify/internal/storage/customerstore"
+	customerstore "github.com/leonlonsdale/projectify/internal/storage/customer"
 )
 
 type Storage struct {
