@@ -7,12 +7,12 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/leonlonsdale/projectify/internal/api"
 	"github.com/leonlonsdale/projectify/internal/errs"
-	"github.com/leonlonsdale/projectify/internal/models"
 	"github.com/leonlonsdale/projectify/pkg/utils/pgutils"
 )
 
-func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*models.CustomerSafe, error) {
+func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*api.CustomerSafe, error) {
 
 	validColumns := map[string]struct{}{
 		"id":    {},
@@ -31,7 +31,7 @@ func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*m
 
 	row := s.db.QueryRowContext(ctx, query, value)
 
-	var u models.CustomerSafe
+	var u api.CustomerSafe
 	err := row.Scan(
 		&u.ID,
 		&u.CreatedAt,
@@ -53,10 +53,10 @@ func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*m
 	return &u, nil
 }
 
-func (s *CustomerStorage) GetByID(ctx context.Context, id uuid.UUID) (*models.CustomerSafe, error) {
+func (s *CustomerStorage) GetByID(ctx context.Context, id uuid.UUID) (*api.CustomerSafe, error) {
 	return s.get(ctx, "id", id)
 }
 
-func (s *CustomerStorage) GetByEmail(ctx context.Context, email string) (*models.CustomerSafe, error) {
+func (s *CustomerStorage) GetByEmail(ctx context.Context, email string) (*api.CustomerSafe, error) {
 	return s.get(ctx, "email", email)
 }

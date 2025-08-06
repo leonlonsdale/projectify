@@ -6,12 +6,12 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"github.com/leonlonsdale/projectify/internal/api"
 	"github.com/leonlonsdale/projectify/internal/errs"
-	"github.com/leonlonsdale/projectify/internal/models"
 	"github.com/leonlonsdale/projectify/pkg/utils/pgutils"
 )
 
-func (s *CustomerStorage) Update(ctx context.Context, data models.CustomerUpdate, id uuid.UUID) (*models.CustomerSafe, error) {
+func (s *CustomerStorage) Update(ctx context.Context, data api.CustomerUpdate, id uuid.UUID) (*api.CustomerSafe, error) {
 	query := `
 		UPDATE customers
 		SET
@@ -24,7 +24,7 @@ func (s *CustomerStorage) Update(ctx context.Context, data models.CustomerUpdate
 
 	row := s.db.QueryRowContext(ctx, query, data.Name, data.Email, id)
 
-	var u models.CustomerSafe
+	var u api.CustomerSafe
 	err := row.Scan(
 		&u.ID,
 		&u.CreatedAt,
