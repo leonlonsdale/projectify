@@ -16,7 +16,6 @@ const UserIDKey contextKey = "userID"
 
 func (a *Auth) Protect(next httputils.HTTPHandler) httputils.HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) error {
-		// TODO: create GetBearerToken
 		tokenString, err := a.JWT.GetBearerToken(r.Header)
 		if err != nil {
 			return errs.NewUnauthorized("missing or malformed authorization header", err)
