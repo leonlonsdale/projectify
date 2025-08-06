@@ -3,49 +3,33 @@ package errs
 import (
 	"errors"
 	"net/http"
+
+	"github.com/leonlonsdale/projectify/internal/api"
 )
 
-type Response struct {
-	Status int      `json:"status"`
-	Error  *Details `json:"error,omitempty"`
-}
+const InternalErrorMsg = "an unexpected internal server error occurred"
 
-type Details struct {
-	Kind    Kind `json:"kind"`
-	Message any  `json:"message"`
-}
-
-func ErrToJSON(err error) Response {
+func ErrToJSON(err error) *api.ErrorResponse {
 	var appErr *Error
 	if !errors.As(err, &appErr) {
-		return Response{
-			Status: http.StatusInternalServerError,
-			Error: &Details{
-				Kind: KindInternal,
-				Message: map[string]string{
-					"error": "an unexpected internal error occurred",
-				},
-			},
-		}
+		return api.NewErrorResponse(
+			http.StatusInternalServerError,
+			string(KindInternal),
+			InternalErrorMsg,
+		)
 	}
 
 	if appErr.Kind == KindInternal {
-		return Response{
-			Status: http.StatusInternalServerError,
-			Error: &Details{
-				Kind: KindInternal,
-				Message: map[string]string{
-					"error": "an unexpected internal error occurred",
-				},
-			},
-		}
+		return api.NewErrorResponse(
+			http.StatusInternalServerError,
+			string(KindInternal),
+			InternalErrorMsg,
+		)
 	}
 
-	return Response{
-		Status: appErr.StatusCode,
-		Error: &Details{
-			Kind:    appErr.Kind,
-			Message: appErr.Message,
-		},
-	}
+	return api.NewErrorResponse(
+		appErr.StatusCode,
+		string(appErr.Kind),
+		appErr.Message,
+	)
 }
