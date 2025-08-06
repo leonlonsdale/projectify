@@ -1,0 +1,49 @@
+# Todo
+
+-   [ ] SQL Migrations
+-   [x] Error package
+-   [x] Configuration layer
+-   [x] Database Package
+-   [x] Models Package
+-   [x] Server Package
+-   [x] Auth Layer
+    -   [x] Argon2id Sub package
+        -   [x] Hash()
+        -   [x] Validate
+    -   [x] JWT Sub package
+        -   [x] Make()
+        -   [x] Validate()
+        -   [x] GetBearerToken()
+    -   [x] Protect() Middleware - check jwt
+-   [ ] Store Layer
+    -   [ ] Customer Store
+        -   [x] Create
+        -   [x] Get By ID
+        -   [x] Update
+        -   [x] Delete
+    -   [ ] Project Store
+        -   [ ] Create
+        -   [ ] Get By ID
+        -   [ ] Update
+        -   [ ] Delete
+    -   [ ] Task Store
+        -   [ ] Create
+        -   [ ] Get By ID
+        -   [ ] Update
+        -   [ ] Delete
+-   [ ] Router Layer
+    -   [ ] Customer handlers
+        -   [x] Create
+        -   [x] Get By ID
+        -   [x] Update
+        -   [x] Delete
+    -   [ ] Project handlers
+        -   [ ] Create
+        -   [ ] Get By ID
+        -   [ ] Update
+        -   [ ] Delete
+    -   [ ] Task handlers
+        -   [ ] Create
+        -   [ ] Get By ID
+        -   [ ] Update
+        -   [ ] Delete

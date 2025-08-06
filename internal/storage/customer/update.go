@@ -16,7 +16,7 @@ func (s *CustomerStorage) Update(ctx context.Context, data api.CustomerUpdate, i
 		UPDATE customers
 		SET
 			name = COALESCE($1, name),
-			email = COALESCE($2, name),
+			email = COALESCE($2, email),
 			updated_at = NOW()
 		WHERE id = $3
 		RETURNING id, created_at, updated_at, name, email;

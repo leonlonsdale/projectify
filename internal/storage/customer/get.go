@@ -25,7 +25,7 @@ func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*a
 
 	query := `
 		SELECT id, created_at, updated_at, name, email
-		FROM users
+		FROM customers
 		WHERE ` + column + ` = $1;
 	`
 
@@ -43,7 +43,7 @@ func (s *CustomerStorage) get(ctx context.Context, column string, value any) (*a
 	if err != nil {
 		mappedErr := pgutils.MapPgError(err)
 
-		if errors.Is(err, sql.ErrNoRows) {
+		if errors.Is(mappedErr, sql.ErrNoRows) {
 			return nil, errs.ErrUserNotFound
 		}
 

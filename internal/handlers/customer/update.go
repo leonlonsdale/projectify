@@ -33,7 +33,7 @@ func (h *CustomerHandler) HandleUpdateCustomer(w http.ResponseWriter, r *http.Re
 		return errs.NewInternalServerError("error updating user", err)
 	}
 
-	if err := httputils.WriteSuccessJSON(w, http.StatusCreated, "user", user); err != nil {
+	if err := httputils.WriteSuccessJSON(w, http.StatusOK, "user", user); err != nil {
 		return errs.NewInternalServerError("error writing json", err)
 	}
 

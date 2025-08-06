@@ -7,25 +7,23 @@ import (
 )
 
 type Config struct {
-	Addr       string
-	DBProtocol string
-	DBURL      string
-	JWTSecret  string
+	Addr      string `env:"ADDR"`
+	DBURL     string `env:"DB_URL"`
+	JWTSecret string `env:"JWT_SECRET"`
 }
 
 func NewConfig() (*Config, error) {
 
 	addr := os.Getenv("ADDR")
-	dbProtocol := os.Getenv("DB_PROTOCOL")
-	dbURL := os.Getenv("DBURL")
+	dbURL := os.Getenv("DB_URL")
 	jwtSecret := os.Getenv("JWT_SECRET")
+
+	if jwtSecret == "" {
+		return nil, errors.New("'JWT_SECRET' environment var is not set")
+	}
 
 	if addr == "" {
 		return nil, errors.New("'ADDR' environment var is not set")
-	}
-
-	if dbProtocol == "" {
-		return nil, errors.New("'DB_PROTOCOL' environment var is not set")
 	}
 
 	if dbURL == "" {
@@ -33,9 +31,8 @@ func NewConfig() (*Config, error) {
 	}
 
 	return &Config{
-		Addr:       addr,
-		DBProtocol: dbProtocol,
-		DBURL:      dbURL,
-		JWTSecret:  jwtSecret,
+		Addr:      addr,
+		DBURL:     dbURL,
+		JWTSecret: jwtSecret,
 	}, nil
 }
