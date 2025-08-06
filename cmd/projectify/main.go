@@ -2,7 +2,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log/slog"
 	"os"
@@ -10,18 +9,17 @@ import (
 	"github.com/leonlonsdale/projectify/internal/auth"
 	"github.com/leonlonsdale/projectify/internal/config"
 	"github.com/leonlonsdale/projectify/internal/database"
-	"github.com/leonlonsdale/projectify/internal/router"
+	"github.com/leonlonsdale/projectify/internal/handlers"
 	"github.com/leonlonsdale/projectify/internal/server"
 	"github.com/leonlonsdale/projectify/internal/storage"
 )
 
 type Application struct {
-	cfg    *config.Config
-	auth   *auth.Auth
-	store  *storage.Storage
-	routes *router.Router
-	db     *sql.DB
-	server *server.Server
+	cfg      *config.Config
+	auth     *auth.Auth
+	store    *storage.Storage
+	handlers *handlers.Handlers
+	server   *server.Server
 }
 
 func (a *Application) setup() error {
@@ -38,10 +36,9 @@ func (a *Application) setup() error {
 		return fmt.Errorf("init db: %w", err)
 	}
 
-	a.db = db
-	a.store = storage.NewStorage(a.db)
-	a.routes = router.NewRouter(a.store, a.cfg, a.auth)
-	a.server = server.NewServer(a.cfg.Addr, a.routes)
+	a.store = storage.NewStorage(db)
+	a.handlers = handlers.NewRouter(a.store, a.cfg, a.auth)
+	a.server = server.NewServer(a.cfg.Addr, a.handlers)
 
 	return nil
 }
