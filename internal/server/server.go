@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/leonlonsdale/projectify/internal/router"
+	"github.com/leonlonsdale/projectify/internal/handlers"
 )
 
 // All the comments are belong to us
@@ -14,10 +14,10 @@ import (
 type Server struct {
 	addr       string
 	httpServer *http.Server
-	router     *router.Router
+	router     *handlers.Handlers
 }
 
-func NewServer(addr string, router *router.Router) *Server {
+func NewServer(addr string, router *handlers.Handlers) *Server {
 
 	httpServer := &http.Server{
 		Addr:         addr,
