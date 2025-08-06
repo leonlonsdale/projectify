@@ -8,12 +8,9 @@ import (
 func DecodeJSON(body io.ReadCloser, v any) error {
 	decoder := json.NewDecoder(body)
 	decoder.DisallowUnknownFields()
+	return decoder.Decode(v)
+}
 
-	err := decoder.Decode(v)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+func EncodeJSON(v any) ([]byte, error) {
+	return json.Marshal(v)
 }
