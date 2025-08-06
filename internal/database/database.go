@@ -11,13 +11,11 @@ import (
 func NewDB(cfg *config.Config) (*sql.DB, error) {
 	db, err := sql.Open(cfg.DBProtocol, cfg.DBURL)
 	if err != nil {
-		// TODO: Handle error
-		return nil, nil
+		return nil, err
 	}
 
 	if err := db.Ping(); err != nil {
-		// TODO: Handle error
-		return nil, nil
+		return nil, err
 	}
 
 	return db, nil
