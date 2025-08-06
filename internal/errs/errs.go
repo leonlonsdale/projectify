@@ -51,7 +51,7 @@ func New(kind Kind, statusCode int, message string) error {
 
 func Wrap(err error, kind Kind, statusCode int, message string) error {
 	if err == nil {
-		return nil
+		panic("errs.Wrap called with nil error: this is a programmer error")
 	}
 	return &Error{
 		Err:        err,

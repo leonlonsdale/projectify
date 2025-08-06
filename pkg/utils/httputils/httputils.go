@@ -13,6 +13,14 @@ type HTTPHandler func(w http.ResponseWriter, r *http.Request) error
 
 func Make(f HTTPHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if p := recover(); r != nil {
+				slog.Error("API Panic", "panic", p, "path", r.URL.Path)
+
+				err := errs.NewInternalServerError("an unexpected internal server error occurred", nil)
+				_ = WriteErrorJSON(w, err)
+			}
+		}()
 		if err := f(w, r); err != nil {
 			slog.Error("API Error", "err", err.Error(), "path", r.URL.Path)
 			_ = WriteErrorJSON(w, err)
